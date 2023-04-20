@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class TestBase {
     WebDriver webDriver;
 
+
     @Parameters({"browserType"})
     @BeforeMethod
     public void beforeTest(@Optional("chrome") String browserType) {
@@ -42,10 +43,12 @@ public abstract class TestBase {
         }
     }
 
+
     private void webDriverSetup(){
         //webDriver.manage().window().maximize();
         webDriver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
+
 
     public void waitSafe(int timeInSeconds) {
         try {
@@ -54,5 +57,6 @@ public abstract class TestBase {
             e.printStackTrace();
         }
     }
+
 
 }

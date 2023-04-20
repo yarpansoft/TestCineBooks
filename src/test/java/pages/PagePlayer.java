@@ -29,10 +29,16 @@ public class PagePlayer extends PageBase {
     private WebElement timingCurrent;
     @FindBy(xpath = "//div[@class='duration-wrapper']//div[@class='rc-slider-handle']")
     private WebElement sliderCurrent;
-    private By sliderCurrentBy = By.xpath("//div[@class='duration-wrapper']//div[@class='rc-slider-handle']");
+    private final By sliderCurrentBy = By.xpath("//div[@class='duration-wrapper']//div[@class='rc-slider-handle']");
+    private final By playerSubtitles = By.xpath("//div[contains(@class, 'video_subtitles')]");
     private int beforeTime;
     private float beforeProgress;
     private int beforePage;
+    private int beforePlayerChunk;
+    private float beforePlayerTime;
+    private int beforeNetworkChunkNumber;
+    private String beforeNetworkChunkLast;
+
 
 
     public PagePlayer(WebDriver webDriver) {
@@ -46,19 +52,16 @@ public class PagePlayer extends PageBase {
         scrollToElement(waitUntilElementIsPresents(By.xpath(playerFrameXpath),10));
     }
 
-
     public void playVideo(int playTimeInSeconds) {
         waitUntilElementIsClickable(buttonPlayCenter, 10).click();
         sleepSafe(playTimeInSeconds);
     }
-
 
     public void clickButtonPause() {
         hoverElement(playerFrame);
         buttonPause.click();
         sleepSafe(1);
     }
-
 
     public void clickButtonPlay() {
         hoverElement(playerFrame);
@@ -78,6 +81,15 @@ public class PagePlayer extends PageBase {
         sleepSafe(1);
     }
 
+    public boolean isButtonPlayExist() {
+        hoverElement(playerFrame);
+        return isElementPresence(buttonPlay,1);
+    }
+
+    public boolean isButtonPauseExist() {
+        hoverElement(playerFrame);
+        return isElementPresence(buttonPause,1);
+    }
 
     public int getCurrentPage() {
         hoverElement(playerFrame);
@@ -89,7 +101,6 @@ public class PagePlayer extends PageBase {
         return pageNum;
     }
 
-
     public int getCurrentTiming() {
         hoverElement(playerFrame);
         int timeSec = parseInt(timingCurrent.getText().substring(6, 8));
@@ -97,7 +108,6 @@ public class PagePlayer extends PageBase {
         System.out.println("SECONDS: " + timeSec);
         return timeSec;
     }
-
 
     public float getCurrentSlider(){
         hoverElement(playerFrame);
@@ -107,33 +117,84 @@ public class PagePlayer extends PageBase {
         return timeProg;
     }
 
-    public boolean isButtonPlayExist() {
-        hoverElement(playerFrame);
-        return isElementPresence(buttonPlay,1);
+    public String getCurrentSubtitle(){
+        String subTitle= webDriver.findElement(playerSubtitles).getAttribute("text");
+        System.out.println("SUBTITLE: " + subTitle);
+        return subTitle;
     }
 
-    public boolean isButtonPauseExist() {
-        hoverElement(playerFrame);
-        return isElementPresence(buttonPause,1);
+    public int getVideoPlayerCurrentChunk(){
+        String JsValue = executeJavaScript("return document.querySelector('video').played.length;");
+        System.out.println("VideoPlayerCurrentChunk: " + JsValue);
+        return parseInt(JsValue);
     }
 
+    public float getVideoPlayerCurrentTime(){
+        String JsValue = executeJavaScript("return document.querySelector('video').currentTime;");
+        System.out.println("VideoPlayerCurrentTime: " + JsValue);
+        return parseFloat(JsValue);
+    }
+
+    public int getNetworkTabChunkNumber(){
+        String JsValue = executeJavaScript("const resources = performance.getEntriesByType('resource'); var out = []; " +
+                "resources.forEach((entry) => {var n = entry.name; if (n.includes('demo_video')) { out.push(`${entry.name}`); }; }); return out.length;");
+        System.out.println("NetworkTabChunkNumber: " + JsValue);
+        return parseInt(JsValue);
+    }
+
+    public String getNetworkTabChunkLast(){
+        String JsValue = executeJavaScript("const resources = performance.getEntriesByType('resource'); var out = []; " +
+                "resources.forEach((entry) => {var n = entry.name; if (n.includes('demo_video')) { out.push(`${entry.name}`); }; }); return out[out.length - 1];");
+        System.out.println("NetworkTabChunkLast: " + JsValue);
+        return JsValue;
+    }
+
+    public void setVideoPlayerPaused(){
+        executeJavaScript("document.querySelector('video').pause();");
+    }
+
+    public boolean ifVideoPlayerPaused(){
+        return Boolean.parseBoolean(executeJavaScript("return document.querySelector('video').paused;"));
+    }
 
     public void collectCurrentMetrics(){
         beforeTime = getCurrentTiming();
         beforeProgress = getCurrentSlider();
         beforePage = getCurrentPage();
+        beforePlayerChunk = getVideoPlayerCurrentChunk();
+        beforePlayerTime = getVideoPlayerCurrentTime();
+        beforeNetworkChunkNumber = getNetworkTabChunkNumber();
+        beforeNetworkChunkLast = getNetworkTabChunkLast();
     }
 
     public int getBeforeTime(){
         return beforeTime;
     }
-
     public float getBeforeProgress(){
         return beforeProgress;
     }
-
     public int getBeforePage(){
         return beforePage;
     }
+    public int getBeforePlayerChunk(){
+        return beforePlayerChunk;
+    }
+    public float getBeforePlayerTime(){
+        return beforePlayerTime;
+    }
+    public int getBeforeNetworkChunkNumber(){
+        return beforeNetworkChunkNumber;
+    }
+    public String getBeforeNetworkChunkLast(){
+        return beforeNetworkChunkLast;
+    }
+
+
+
+
+
+
+
+
 
 }

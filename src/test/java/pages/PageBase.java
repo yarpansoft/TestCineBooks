@@ -17,10 +17,17 @@ public abstract class PageBase {
         action.moveToElement(webElement).perform();
     }
 
+
+    public String executeJavaScript (String Jscript){
+        return ((JavascriptExecutor)webDriver).executeScript(Jscript).toString();
+    }
+
+
     protected void scrollToElement(WebElement webElement){
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView({ behavior: 'instant', block: 'center', inline: 'center' });", webElement);
         sleepSafe(3);
     }
+
 
     protected void sleepSafe(int timeInSeconds) {
         try {
@@ -30,11 +37,13 @@ public abstract class PageBase {
         }
     }
 
+
     protected WebElement waitUntilElementIsClickable(WebElement webElement, int timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(timeOutInSeconds));
         wait.until(ExpectedConditions.elementToBeClickable(webElement));
         return webElement;
     }
+
 
     protected WebElement waitUntilElementIsVisible(WebElement webElement, int timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(timeOutInSeconds));
@@ -42,11 +51,13 @@ public abstract class PageBase {
         return webElement;
     }
 
+
     protected WebElement waitUntilElementIsPresents(By by, int timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(timeOutInSeconds));
         wait.until(ExpectedConditions.presenceOfElementLocated(by));
         return webDriver.findElement(by);
     }
+
 
     protected boolean isElementPresence(WebElement webElement, int timeOutInSeconds) {
         boolean i = false;
