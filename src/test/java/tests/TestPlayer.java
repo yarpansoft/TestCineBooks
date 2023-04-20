@@ -24,7 +24,6 @@ public class TestPlayer extends TestBase {
         waitSafe(typicalPauseTime);
         Assert.assertTrue(pagePlayer.getCurrentTiming() == pagePlayer.getBeforeTime(),"Time is changed");
         Assert.assertTrue(pagePlayer.getCurrentSlider() == pagePlayer.getBeforeProgress(),"ProgressBar position is changed");
-
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentChunk() == pagePlayer.getBeforePlayerChunk(),"Player. Another chunk in player");
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentTime() == pagePlayer.getBeforePlayerTime(),"Timeline is changed");
 
@@ -35,8 +34,6 @@ public class TestPlayer extends TestBase {
         Assert.assertTrue(pagePlayer.getCurrentTiming() >= pagePlayer.getBeforeTime() + typicalPlayTime,"New time is not greater than before");
         Assert.assertTrue(pagePlayer.getCurrentTiming() <= pagePlayer.getBeforeTime() + typicalPlayTime + typicalLagTime,"New time is much more greater than before");
         Assert.assertTrue(pagePlayer.getCurrentSlider() > pagePlayer.getBeforeProgress(),"ProgressBar position is not greater than before");
-
-        //Assert.assertTrue(pagePlayer.getVideoPlayerCurrentChunk() == pagePlayer.getBeforePlayerChunk() + 1,"Player. New chunk is not play");
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentTime() > pagePlayer.getBeforePlayerTime(),"Timeline in Player is not increased");
 
     }
@@ -56,7 +53,6 @@ public class TestPlayer extends TestBase {
         Assert.assertTrue(pagePlayer.getCurrentTiming() > pagePlayer.getBeforeTime(),"New time is not greater than before");
         Assert.assertTrue(pagePlayer.getCurrentSlider() > pagePlayer.getBeforeProgress(),"ProgressBar position is not greater than before");
         Assert.assertTrue(pagePlayer.getCurrentPage() == pagePlayer.getBeforePage() + 1,"Current page is not previous + 1");
-
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentChunk() == pagePlayer.getBeforePlayerChunk() + 1,"Player. New chunk is not play");
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentTime() > pagePlayer.getBeforePlayerTime(),"Timeline in Player is not increased");
         Assert.assertTrue(pagePlayer.getNetworkTabChunkNumber() == pagePlayer.getBeforeNetworkChunkNumber() + 1,"Network Tab. Chunk is not previous + 1");
@@ -80,7 +76,6 @@ public class TestPlayer extends TestBase {
         Assert.assertTrue(pagePlayer.getCurrentTiming() < pagePlayer.getBeforeTime(),"New time is greater than before");
         Assert.assertTrue(pagePlayer.getCurrentSlider() < pagePlayer.getBeforeProgress(),"ProgressBar position is greater than before");
         Assert.assertEquals(pagePlayer.getCurrentPage(),pagePlayer.getBeforePage() - 1,  "Current page is not previous - 1");
-
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentChunk() <= pagePlayer.getBeforePlayerChunk(),"Player. Chunk No increased");
         Assert.assertTrue(pagePlayer.getVideoPlayerCurrentTime() < pagePlayer.getBeforePlayerTime(),"Timeline in Player is not decreased");
     }
